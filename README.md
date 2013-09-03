@@ -31,3 +31,24 @@ To run:
 ```
 
 then visit http://127.0.0.1:8080
+
+
+## Trying out
+
+To test the application:
+
+```
+% pip install httpie
+% http POST http://127.0.0.1:8080 device_name="My device" sensor_name="sensor_1" sensor_value="1234"
+% http GET http://127.0.0.1:8080
+```
+
+
+## The (basic) API
+
+* ``GET /`` returns a (paginated) list of sensor readings. The ``Link:`` header
+  of the response will contain the first/prev/next/last page URLs.
+
+* ``POST /`` can be used to add sensor readings (as JSON objects).
+
+  Example: ``{"device_name": "My device", "sensor_name": "sensor_1", "sensor_value": "1234"}``.
