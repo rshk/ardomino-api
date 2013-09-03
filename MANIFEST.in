@@ -1,0 +1,5 @@
+include README.rst
+recursive-include ckanext *.jpg *.png
+recursive-include ckanext *.css *.less
+recursive-include ckanext *.html
+recursive-exclude . *~
