@@ -61,5 +61,5 @@ tramp
 # PyCharm
 /.idea
 
-# CKAN-specific
 local_settings*.py
+!local_settings.example.py
