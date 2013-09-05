@@ -11,7 +11,7 @@ Server-side application (draft) for [Ardomino](https://github.com/alfcrisci/Ardo
 Configure:
 
 ```
-% cp local_settings.example.py
+% cp local_settings.example.py local_settings.py
 ```
 
 ..and configure ``local_settings.py`` to your needs.
