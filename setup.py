@@ -83,7 +83,7 @@ setup(
     cmdclass={'test': PyTest},
     entry_points={
         'console_scripts': [
-            'ardomino = ardomino.server:run_from_command_line',
+            'ardomino = ardomino.cli:run_from_command_line',
         ],
     },
     **extra
