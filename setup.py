@@ -29,6 +29,9 @@ class PyTest(TestCommand):
         TestCommand.finalize_options(self)
         self.test_args = [
             '--ignore=build',
+            '--ignore=utils',
+            '--cov=ardomino',
+            '--cov-report=term-missing',
             '--pep8',
             '.']
         self.test_suite = True

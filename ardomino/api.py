@@ -17,11 +17,12 @@ class SensorReadingResource(restful.Resource):
     def _serialize(self, obj):
         return {
             'id': obj.id,
+            'date': obj.date.strftime("%F %T"),
             'device_name': obj.device_name,
+            'location': obj.location,
             'sensor_name': obj.sensor_name,
             'sensor_value': obj.sensor_value,
             'sensor_units': obj.sensor_units,
-            'date': obj.date.strftime("%F %T"),
         }
 
     def get(self):
@@ -96,16 +97,20 @@ class SensorReadingResource(restful.Resource):
     def post(self):
         new = SensorReading()
         obj = request.json
+        ## todo: we need to validate keys here..
         new.device_name = obj['device_name']
         new.sensor_name = obj['sensor_name']
         new.sensor_value = obj['sensor_value']
+        new.location = obj.get('location')
+        new.sensor_units = obj.get('sensor_units')
         if 'date' in obj:
-            new.date = datetime.datetime.strptime(obj['date'], '%F %T')
+            date_format = '%Y-%m-%d %H:%M:%S'
+            new.date = datetime.datetime.strptime(obj['date'], date_format)
         else:
             new.date = datetime.datetime.now()
         db.session.add(new)
         db.session.commit()
-        return self._serialize(new)  # todo: return 201 Created instead?
+        return self._serialize(new), 201  # todo: return 201 Created instead?
 
 
 api.add_resource(SensorReadingResource, '/')
