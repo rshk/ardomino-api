@@ -70,6 +70,9 @@ import requests
 import json
 
 data = {
+     "device_name": "My device",
+     "sensor_name": "sensor_1",
+     "sensor_value": "1234",
 }
 requests.post(
 	'http://127.0.0.1:8000',
