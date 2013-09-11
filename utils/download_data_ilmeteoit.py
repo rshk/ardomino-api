@@ -113,8 +113,9 @@ def download_data(city, year, month):
         yield obj
 
 
-date_range = zip([2012] * 12, range(1, 13)) + \
-             zip([2012] * 12, range(1, 10))
+date_range = \
+    zip([2012] * 12, range(1, 13)) + \
+    zip([2012] * 12, range(1, 10))
 
 cities = ['Trento', 'Firenze', 'Como', 'Milano']
 
