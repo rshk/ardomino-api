@@ -7,7 +7,7 @@ def run_from_command_line():
     import optparse
     parser = optparse.OptionParser()
     parser.add_option('--debug', action='store_true', dest='debug',
-        default=False)
+                      default=False)
     parser.add_option('--host', action='store', dest='host', default="0.0.0.0")
     parser.add_option('--port', action='store', dest='port', default="5000")
     opts, args = parser.parse_args()

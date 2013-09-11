@@ -32,7 +32,6 @@ class SensorReadingResource(restful.Resource):
 
         query = SensorReading.query
 
-
         ## Pagination
         page_size = 10
         page = 0

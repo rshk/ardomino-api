@@ -4,6 +4,7 @@ ArdOmino CLI
 
 import argparse
 
+
 def command_run(args):
     from . import app
     app.run(
