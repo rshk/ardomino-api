@@ -20,6 +20,7 @@ class SensorReadingResource(restful.Resource):
             'device_name': obj.device_name,
             'sensor_name': obj.sensor_name,
             'sensor_value': obj.sensor_value,
+            'sensor_units': obj.sensor_units,
             'date': obj.date.strftime("%F %T"),
         }
 
@@ -30,6 +31,7 @@ class SensorReadingResource(restful.Resource):
         ## todo: add support for filtering, ...
 
         query = SensorReading.query
+
 
         ## Pagination
         page_size = 10
@@ -61,7 +63,7 @@ class SensorReadingResource(restful.Resource):
                 restful.abort(404, message='Page number out of range')
 
         ## Pagination links
-        links = []
+        links = {}
 
         def get_url(**kw):
             args = dict(request.args)
@@ -71,22 +73,24 @@ class SensorReadingResource(restful.Resource):
                 return '{0}?{1}'.format(request.base_url, query_string)
             return request.base_url
 
-        if page > 0:
-            links.append("<{0}>; rel=\"first\""
-                         "".format(get_url(page=0,
-                                           page_size=page_size)))
-            links.append("<{0}>; rel=\"prev\""
-                         "".format(get_url(page=page-1,
-                                           page_size=page_size)))
-        if page < max_page:
-            links.append("<{0}>; rel=\"next\""
-                         "".format(get_url(page=page+1,
-                                           page_size=page_size)))
-            links.append("<{0}>; rel=\"last\""
-                         "".format(get_url(page=max_page,
-                                           page_size=page_size)))
+        def get_page_url(page):
+            return get_url(page=page, page_size=page_size)
 
-        headers = {'Link': ", ".join(links)}
+        if page > 0:
+            links['first'] = get_page_url(0)
+            links['prev'] = get_page_url(page - 1)
+
+        if page < max_page:
+            links['next'] = get_page_url(page + 1)
+            links['last'] = get_page_url(max_page)
+
+        headers = {}
+
+        if len(links):
+            links_header = ', '.join('<{0}>; rel="{1}"'.format(k, v)
+                                     for k, v in links.iteritems())
+            headers['Link'] = links_header
+
         results = query.slice(page * page_size, (page + 1) * page_size)
         return [self._serialize(o) for o in results], 200, headers
 
@@ -96,7 +100,10 @@ class SensorReadingResource(restful.Resource):
         new.device_name = obj['device_name']
         new.sensor_name = obj['sensor_name']
         new.sensor_value = obj['sensor_value']
-        new.date = datetime.datetime.now()
+        if 'date' in obj:
+            new.date = datetime.datetime.strptime(obj['date'], '%F %T')
+        else:
+            new.date = datetime.datetime.now()
         db.session.add(new)
         db.session.commit()
         return self._serialize(new)  # todo: return 201 Created instead?
